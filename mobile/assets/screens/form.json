@@ -1,0 +1,145 @@
+{
+  "type": "scaffold",
+  "appBar": {
+    "type": "appBar",
+    "title": {
+      "type": "text",
+      "data": "Profile"
+    },
+    "leading": {
+      "type": "iconButton",
+      "icon": {
+        "type": "icon",
+        "icon": "arrow_back"
+      },
+      "onPressed": {
+        "actionType": "navigate",
+        "navigationStyle": "pop"
+      }
+    }
+  },
+  "body": {
+    "type": "padding",
+    "padding": 24,
+    "child": {
+      "type": "form",
+      "autovalidateMode": "onUserInteraction",
+      "child": {
+        "type": "column",
+        "crossAxisAlignment": "stretch",
+        "children": [
+          {
+            "type": "textFormField",
+            "id": "name",
+            "decoration": {
+              "labelText": "Name"
+            },
+            "validatorRules": [
+              {
+                "rule": "isLength",
+                "options": {
+                  "min": 2,
+                  "max": 255
+                },
+                "message": "Enter your name"
+              }
+            ]
+          },
+          {
+            "type": "sizedBox",
+            "height": 16
+          },
+          {
+            "type": "textFormField",
+            "id": "email",
+            "keyboardType": "emailAddress",
+            "decoration": {
+              "labelText": "Email"
+            },
+            "validatorRules": [
+              {
+                "rule": "isLength",
+                "options": {
+                  "min": 1,
+                  "max": 255
+                }
+              },
+              {
+                "rule": "isEmail"
+              }
+            ]
+          },
+          {
+            "type": "sizedBox",
+            "height": 24
+          },
+          {
+            "type": "filledButton",
+            "child": {
+              "type": "text",
+              "data": "Submit"
+            },
+            "onPressed": {
+              "actionType": "validateForm",
+              "isValid": {
+                "actionType": "networkRequest",
+                "url": "/sdui/actions/profile",
+                "method": "post",
+                "contentType": "application/json",
+                "body": {
+                  "name": {
+                    "actionType": "getFormValue",
+                    "id": "name"
+                  },
+                  "email": {
+                    "actionType": "getFormValue",
+                    "id": "email"
+                  }
+                },
+                "results": [
+                  {
+                    "statusCode": 200,
+                    "action": {
+                      "actionType": "showSnackBar",
+                      "content": {
+                        "type": "text",
+                        "data": "Saved."
+                      }
+                    }
+                  },
+                  {
+                    "statusCode": 422,
+                    "action": {
+                      "actionType": "showSnackBar",
+                      "content": {
+                        "type": "text",
+                        "data": "Check the highlighted fields."
+                      }
+                    }
+                  },
+                  {
+                    "statusCode": 500,
+                    "action": {
+                      "actionType": "showDialog",
+                      "widget": {
+                        "type": "text",
+                        "data": "Something went wrong."
+                      }
+                    }
+                  }
+                ]
+              },
+              "isNotValid": {
+                "actionType": "showDialog",
+                "widget": {
+                  "type": "text",
+                  "data": "Check the highlighted fields."
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
