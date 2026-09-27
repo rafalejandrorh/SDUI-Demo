@@ -1,5 +1,3 @@
-import 'auth_exception.dart';
-
 abstract class AuthRepository {
   Future<String> login({
     required String email,
